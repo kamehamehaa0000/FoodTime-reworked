@@ -12,7 +12,7 @@ const authenticate = (
 ) => {
   const token =
     req.cookies.token || req.header('Authorization')?.replace('Bearer ', '')
-
+  console.log(token)
   if (!token) {
     return next(new ApiError(401, 'No token provided, authorization denied'))
   }
