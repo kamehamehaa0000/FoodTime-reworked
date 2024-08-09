@@ -25,7 +25,7 @@ const loginAdmin = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const token = jwt.sign({ adminId: admin._id }, secret, { expiresIn: '4h' })
-    res.cookie('token', token)
+    res.cookie('adminToken', token, { httpOnly: true })
     res
       .status(200)
       .json(new ApiResponse(200, { admin, token }, 'Login successful'))
@@ -47,22 +47,41 @@ const updateAdmin = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     if (password) {
-      admin.password = await bcrypt.hash(password, 10)
+      admin.password = password
     }
 
     await admin.save()
+
+    const adminResponse = admin.username
+
     res
       .status(200)
-      .json(
-        new ApiResponse(
-          200,
-          admin.populate('-password'),
-          'Admin updated successfully'
-        )
-      )
+      .json(new ApiResponse(200, adminResponse, 'Admin updated successfully'))
   } catch (error) {
     next(new ApiError(500, (error as Error).message))
   }
 }
 
-export { loginAdmin, updateAdmin }
+const userLogout = async (req: Request, res: Response) => {
+  try {
+    console.log('logout ran')
+    res.cookie('adminToken', '', {
+      httpOnly: true,
+    })
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, null, 'Admin logged out successfully'))
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong during logout' })
+  }
+}
+const checkAuth = (req: Request, res: Response) => {
+  if (req.cookies.adminToken) {
+    res.status(200).json({ adminToken: req.cookies.adminToken })
+  } else {
+    res.status(401).json({ message: 'Not authenticated' })
+  }
+}
+
+export { loginAdmin, updateAdmin, userLogout, checkAuth }

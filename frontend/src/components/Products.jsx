@@ -6,6 +6,7 @@ import {
   useCategories,
   useProductsByCategory,
 } from '../hooks/useProduct'
+import { useMenuItems } from '../hooks/useMenu'
 
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('all')
@@ -21,10 +22,9 @@ const Products = () => {
     data: productsResponse,
     isLoading: productsLoading,
     error: productsError,
-  } = useProductsByCategory(selectedCategory, page)
-
-  const productList = Array.isArray(productsResponse?.data?.products)
-    ? productsResponse?.data?.products
+  } = useMenuItems(page, selectedCategory)
+  const productList = Array.isArray(productsResponse?.data?.items)
+    ? productsResponse?.data?.items
     : []
 
   const hasMoreProducts = page < productsResponse?.data?.totalPages

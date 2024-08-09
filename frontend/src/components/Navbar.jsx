@@ -23,7 +23,9 @@ const Navbar = () => {
       const fetchData = async () => {
         try {
           const response = await axios.get(
-            `/api/search?query=${debouncedSearch}`
+            `${
+              import.meta.env.VITE_BACKEND_URL
+            }/product/search?query=${debouncedSearch}`
           )
           setResults(response.data.data)
         } catch (error) {
@@ -35,6 +37,8 @@ const Navbar = () => {
       setResults([])
     }
   }, [debouncedSearch])
+
+  console.log(results)
 
   const handleLogout = async () => {
     try {
@@ -77,7 +81,7 @@ const Navbar = () => {
           className="mx-2 cursor-pointer text-green-500 flex items-center"
         >
           <RiDashboardHorizontalLine className="mx-2 text-xl" />
-          <h1 className="hidden sm:block">Cart </h1>
+          <h1 className="hidden sm:block">Dashboard </h1>
         </button>
         {token ? (
           <button
@@ -136,17 +140,26 @@ const Search = ({ input, setInput }) => {
 
 const Results = ({ results }) => {
   return (
-    <div className=" flex flex-col p-4 items-center justify-center absolute rounded-xl overflow-y-auto z-[99] left-[50%] mx-auto -translate-x-1/2 top-[120%] w-11/12 sm:w-[80%]  h-60 bg-[#F6F7F8]">
+    <div className=" flex flex-col p-4  items-center  absolute rounded-xl overflow-y-auto z-[99] left-[50%] mx-auto -translate-x-1/2 top-[120%] w-11/12 sm:w-[80%]  h-60 bg-[#F6F7F8]">
       {results?.length > 0 ? (
         results?.map((result) => (
           <div
             key={result?._id}
-            className="p-4 hover:bg-gray-100 cursor-pointer"
+            className="p-4 h-20  w-full justify-between items-center border-b   flex hover:bg-gray-100 cursor-pointer"
           >
-            <Link to={`/product/${result?._id}`}>
-              <h3 className="text-lg font-semibold">{result?.name}</h3>
-              <p className="text-sm text-gray-500">{result?.description}</p>
-            </Link>
+            <div>
+              <Link to={`/product/${result?._id}`}>
+                <h3 className="text-lg font-semibold">{result?.name}</h3>
+                <p className="text-sm text-gray-500">{result?.description}</p>
+              </Link>
+            </div>
+            <div className="w-16 h-16  overflow-hidden">
+              <img
+                src={result?.imageUrl}
+                className="w-16 h-16 rounded-full object-center object-cover"
+                alt=""
+              />
+            </div>
           </div>
         ))
       ) : (

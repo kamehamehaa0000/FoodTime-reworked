@@ -18,27 +18,7 @@ const Page3 = () => {
         id="services"
         className="text-center text-3xl sm:text-4xl font-bold my-4 sm:my-6"
       >
-        Our Services
-      </div>
-
-      <div className="w-full my-10 flex items-center justify-center">
-        <div className="w-11/12 lg:w-8/12  sm:shadow-lg p-6 md:p-20 lg:p-10 rounded-2xl flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 md:gap-10">
-          <img
-            src={ser1}
-            alt="Service 1"
-            className="w-3/6 sm:w-1/3 md:w-1/3 object-center"
-          />
-          <img
-            src={ser2}
-            alt="Service 2"
-            className="w-3/6 sm:w-1/3 md:w-1/3 object-center"
-          />
-          <img
-            src={ser3}
-            alt="Service 3"
-            className="w-3/6 sm:w-1/3 md:w-1/3 object-center"
-          />
-        </div>
+        Reservations
       </div>
     </div>
   )

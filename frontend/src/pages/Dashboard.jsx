@@ -3,6 +3,7 @@ import axios from 'axios'
 import { MdEdit } from 'react-icons/md'
 import Loader from '../components/shared/Loader'
 import { useUserReservations } from '../hooks/useReservation'
+import { toast } from 'react-toastify'
 
 const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState('')
@@ -52,6 +53,7 @@ const Dashboard = () => {
     </div>
   )
 }
+
 export default Dashboard
 const ButtonDash = ({ name, tab, currentTab, setCurrentTab }) => {
   return (
@@ -82,8 +84,10 @@ const ShowOrders = () => {
         setOrders(response.data.data)
         setIsLoading(false)
       } catch (error) {
-        alert('Error fetching the Orders')
         setIsLoading(false)
+        toast.error(`No orders found `, {
+          autoClose: 1000,
+        })
       }
     }
 
@@ -106,7 +110,6 @@ const ShowOrders = () => {
             <h3 className="text-base font-semibold mb-4">
               Order ID: {order._id}
             </h3>
-
             <div className="mb-4 text-base">
               <h4 className="text-lg font-medium mb-2">Items:</h4>
               <div className="overflow-x-auto">
@@ -121,10 +124,10 @@ const ShowOrders = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {order.items.map((item, idx) => (
+                    {order?.items?.map((item, idx) => (
                       <tr key={idx} className="border-b border-gray-200">
-                        <td className="py-2 px-4">{item.product.name}</td>
-                        <td className="py-2 px-4">{item.quantity}</td>
+                        <td className="py-2 px-4">{item?.product?.name}</td>
+                        <td className="py-2 px-4">{item?.quantity}</td>
                         <td className="py-2 px-4">
                           Rs.{' '}
                           {(
@@ -233,7 +236,6 @@ const ShowUser = () => {
   return (
     <div className="w-full sm:max-w-lg px-4 py-6 mx-auto sm:mx-0">
       <h2 className="text-2xl font-bold mb-6">Your Profile</h2>
-
       <div className="bg-white my-4 font-semibold p-6 rounded-lg shadow-lg">
         {isEditing ? (
           <div className="flex flex-col gap-4">
@@ -328,6 +330,7 @@ const ShowUser = () => {
     </div>
   )
 }
+
 const ShowReservations = () => {
   const { data: reservations, isLoading, error } = useUserReservations()
   if (isLoading) {
@@ -347,8 +350,11 @@ const ShowReservations = () => {
     <div className="container  px-4 py-6">
       <h2 className="text-2xl font-bold mb-6">Your Reservations</h2>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {reservations?.data.map((reservation) => (
-          <div className="bg-white shadow-lg rounded-lg text-sm p-4 my-2 flex flex-col  border border-gray-200">
+        {reservations?.data.map((reservation, idx) => (
+          <div
+            key={reservation._id}
+            className="bg-white shadow-lg rounded-lg text-sm p-4 my-2 flex flex-col  border border-gray-200"
+          >
             <p className="text-gray-700 text-sm">
               <strong>Reservation Id:</strong> {reservation._id}
             </p>

@@ -13,7 +13,8 @@ const authenticateAdmin = (
   next: NextFunction
 ) => {
   const token =
-    req.cookies.token || req.header('Authorization')?.replace('Bearer ', '')
+    req.cookies.adminToken ||
+    req.header('Authorization')?.replace('Bearer ', '')
 
   if (!token) {
     return next(new ApiError(401, 'No token provided, authorization denied'))

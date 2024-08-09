@@ -5,7 +5,7 @@ const fetchMenuItems = async (page, category) => {
   const { data } = await axios.get(
     `${
       import.meta.env.VITE_BACKEND_URL
-    }/menu/filter?category=${category}&page=${page}`,
+    }/product/menu/filter?category=${category}&page=${page}`,
     {
       withCredentials: true,
     }

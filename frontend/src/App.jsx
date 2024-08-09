@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Route, BrowserRouter, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
@@ -11,40 +11,74 @@ import Checkout from './pages/Checkout'
 import Success from './components/Success'
 import globalContext from './contexts/globalContext'
 import Dashboard from './pages/DashBoard'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminLogin from './pages/admin/AdminLogin'
+import AdminNavbar from './components/AdminNavbar'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const App = () => {
-  const { token } = useContext(globalContext)
+  const { token, adminToken } = useContext(globalContext)
+  const [isAdminRoute, setIsAdminRoute] = useState('')
+  const location = useLocation()
+  useEffect(() => {
+    setIsAdminRoute(location.pathname.startsWith('/admin'))
+  }, [location])
 
   return (
-    <BrowserRouter>
-      <GoogleOAuthProvider
-        clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
-      >
-        <div className="w-full min-h-screen overflow-x-hidden text-xl p-2 sm:p-10 pb-2  font-[gilroy]">
-          <Navbar />{' '}
-          {token ? (
-            <>
-              <Routes>
-                <Route exact path="/" element={<LandingPage />} />
-                <Route exact path="/success" element={<Success />} />
-                <Route exact path="/home" element={<LandingPage />} />
-                <Route exact path="/signup" element={<SignupPage />} />
-                <Route exact path="/signin" element={<LoginPage />} />
-                <Route exact path="/product" element={<ProductDetails />} />
-                <Route exact path="/checkout" element={<Checkout />} />
-                <Route exact path="/dashboard" element={<Dashboard />} />
-                <Route exact path="*" element={<NotFound />} />
-              </Routes>
-            </>
-          ) : (
+    <GoogleOAuthProvider
+      clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}
+    >
+      <div className="w-full min-h-screen overflow-x-hidden text-xl p-2 sm:p-10 pb-2  font-[gilroy]">
+        {isAdminRoute ? <AdminNavbar /> : <Navbar />}
+        <ToastContainer autoClose="1000" position="top-center" />
+        {token ? (
+          <>
             <Routes>
-              <Route exact path="*" element={<LoginPage />} />
-              <Route exact path="/signup" element={<SignupPage />} />
-              <Route exact path="/signin" element={<LoginPage />} />
+              <Route exact path="/" element={<LandingPage />} />
+              <Route exact path="/success" element={<Success />} />
+              <Route exact path="/home" element={<LandingPage />} />
+              <Route exact path="/signup" element={<LandingPage />} />
+              <Route exact path="/signin" element={<LandingPage />} />
+              <Route
+                exact
+                path="/product/:productID"
+                element={<ProductDetails />}
+              />
+              <Route exact path="/checkout" element={<Checkout />} />
+              <Route exact path="/dashboard" element={<Dashboard />} />
+              <Route exact path="*" element={<NotFound />} />
+              {adminToken ? (
+                <>
+                  <Route exact path="/admin/*" element={<AdminDashboard />} />
+                  <Route
+                    exact
+                    path="/admin/dashboard"
+                    element={<AdminDashboard />}
+                  />
+                </>
+              ) : (
+                <>
+                  <Route
+                    exact
+                    path="/admin/dashboard"
+                    element={<AdminLogin />}
+                  />
+                  <Route exact path="/admin/*" element={<AdminLogin />} />
+                  <Route exact path="/admin/signin" element={<AdminLogin />} />
+                </>
+              )}
             </Routes>
-          )}
-        </div>{' '}
-      </GoogleOAuthProvider>
-    </BrowserRouter>
+          </>
+        ) : (
+          <Routes>
+            <Route exact path="*" element={<LoginPage />} />
+            <Route exact path="/signup" element={<SignupPage />} />
+            <Route exact path="/signin" element={<LoginPage />} />
+          </Routes>
+        )}
+      </div>{' '}
+    </GoogleOAuthProvider>
   )
 }
 

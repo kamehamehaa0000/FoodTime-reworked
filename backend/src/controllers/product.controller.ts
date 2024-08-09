@@ -15,15 +15,19 @@ const productSchema = z.object({
   offerPercentage: z.number(),
   inMenu: z.boolean().optional(),
 })
-// const getAllMenuItems = asyncHandler(async (req: Request, res: Response) => {
-//   const menuItems = await Product.find({ inMenu: true })
-//   if (!menuItems.length) {
-//     throw new ApiError(404, 'No items found in the menu')
-//   }
-//   res
-//     .status(200)
-//     .json(new ApiResponse(200, menuItems, 'Menu items retrieved successfully'))
-// })
+export const getAllMenuItems = asyncHandler(
+  async (req: Request, res: Response) => {
+    const menuItems = await Product.find({ inMenu: true })
+    if (!menuItems.length) {
+      throw new ApiError(404, 'No items found in the menu')
+    }
+    res
+      .status(200)
+      .json(
+        new ApiResponse(200, menuItems, 'Menu items retrieved successfully')
+      )
+  }
+)
 const getMenuItemsPaginated = asyncHandler(
   async (req: Request, res: Response) => {
     const { page = 1, limit = 16, category } = req.query
@@ -220,7 +224,8 @@ const updateProduct = asyncHandler(async (req: Request, res: Response) => {
   }
   console.log(req.body)
   const productData = imageUrl ? { ...req.body, imageUrl } : req.body
-  console.log(productData)
+  productData.price = parseInt(productData.price)
+  productData.offerPercentage = parseInt(productData.offerPercentage)
   const { success, error } = productSchema.partial().safeParse(productData)
   if (!success) {
     throw new ApiError(400, `Invalid Inputs: ${error.message}`)

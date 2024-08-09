@@ -1,11 +1,14 @@
 import React from 'react'
+import { useProductById } from '../hooks/useProduct'
+import { useParams } from 'react-router-dom'
+import { useAddToCart, useCart, useRemoveFromCart } from '../hooks/useCart'
 
 const ProductDetails = ({
   name = 'Espresso Coffee',
   discription = `Espresso is a concentrated form of coffee produced by forcing hot water under high pressure through finely-ground coffee beans. Originating in Italy, espresso has become one of the most popular coffee-brewing methods worldwide`,
   price = '1100.00',
   discount = '50%',
-  discountedPrice = '550.00',
+
   img = 'https://torange.biz/photofxnew/200/HD/dark-vivid-colors-cup-200471.jpg',
 }) => {
   const [isLightbox, setLightbox] = React.useState(false)
@@ -21,21 +24,38 @@ const ProductDetails = ({
   function handleClick() {
     setLightbox(!isLightbox)
   }
+  const { data: cart } = useCart()
+  const { mutate: addToCart } = useAddToCart()
+  const { mutate: removeFromCart } = useRemoveFromCart()
+
+  const { productID } = useParams()
+  const { data: product, isLoading, error } = useProductById(productID)
+  const discountedPrice =
+    product?.data?.price -
+      (product?.data?.offerPercentage / 100) * product?.data?.price || '500'
+
+  const quantity =
+    cart?.data?.items.filter((item) => {
+      return item?.product?._id == product?.data?._id
+    })[0]?.quantity || 0
+
   return (
     <div className="w-full overflow-x-hidden ">
       <div className="flex items-center gap-16 px-36 py-20 max-lg:flex-col max-sm:py-0 max-sm:px-0 mb-10 overflow-hidden">
         <div className="grid grid-cols-1 w-1/2 max-lg:w-10/12 max-sm:h-3/4 max-sm:w-screen max-sm:mb-[-140px]">
           <img
-            src={img}
+            src={product?.data?.imageUrl}
             className="rounded-lg w-10/12 max-sm:w-screen max-sm:h-3/4 max-sm:rounded-none"
             onClick={handleClick}
             alt=""
           />
         </div>
         <div className="w-1/2 max-lg:w-4/5">
-          <h1 className="text-5xl mt-4 mb-8 max-sm:text-3xl">{name}</h1>
+          <h1 className="text-5xl mt-4 mb-8 max-sm:text-3xl">
+            {product?.data?.name}
+          </h1>
           <div className="text-sm md:text-lg my-2">
-            <p className="">{discription}</p>
+            <p className="">{product?.data?.description}</p>
             <br />
           </div>
 
@@ -43,10 +63,12 @@ const ProductDetails = ({
             <div className="flex items-center gap-4">
               <span className="font-bold text-4xl">Rs. {discountedPrice}</span>
               <span className="text-orange bg-orange-400 py-1 px-2 rounded-sm">
-                {discount} off
+                {product?.data?.offerPercentage} % off
               </span>
             </div>
-            <p className="line-through font-bold">Rs. {price} </p>
+            <p className="line-through font-bold">
+              Rs. {product?.data?.price}{' '}
+            </p>
           </div>
 
           <div className="flex items-center gap-5 max-lg:flex-col max-lg:items-start max-sm:clear-right">
@@ -56,19 +78,23 @@ const ProductDetails = ({
                 alt=""
                 className="cursor-pointer"
                 width={18}
-                onClick={handleMinus}
+                onClick={() => removeFromCart(product?.data?._id)}
               />
-              <div className="font-bold text-text-md">{1}</div>
+              <div className="font-bold text-text-md">{quantity}</div>
               <img
                 src="/images/icon-plus.svg"
                 alt=""
                 className="cursor-pointer"
                 width={18}
-                onClick={handlePlus}
+                onClick={() => {
+                  addToCart(product?.data?._id, 1)
+                }}
               />
             </div>
             <button
-              onClick={handleAdd}
+              onClick={() => {
+                addToCart(product?.data?._id, 1)
+              }}
               className="hover:opacity-70 flex items-center justify-center gap-4 bg-zinc-900 w-60 py-3 rounded-lg max-sm:w-full"
             >
               <svg width="22" height="20" xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +112,7 @@ const ProductDetails = ({
           style={{ display: isLightbox ? 'flex' : 'none' }}
           className="flex flex-col items-center justify-center group-hover:block fixed inset-0 bg-black bg-opacity-50 max-sm:justify-start"
         >
-          <div className="relative flex flex-col items-end">
+          <div className="relative flex flex-col items-end m-4 justify-center">
             <svg
               className=" fill-white active:fill-orange cursor-pointer"
               width="15"
@@ -98,7 +124,7 @@ const ProductDetails = ({
             </svg>
             <img
               className="rounded-lg max-sm:mt-12 max-sm:h-2/3"
-              src={img}
+              src={product?.data?.imageUrl}
               width={550}
             />
           </div>

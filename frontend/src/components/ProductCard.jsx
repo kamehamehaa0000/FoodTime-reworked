@@ -46,7 +46,7 @@ const ProductCard = ({
         </button>
       </div>
       <div className="rounde bg-[#FFFFFF] px-2 w-full">
-        <Link to="/product">
+        <Link to={`/product/${_id}`}>
           <h2 className="text-left text-zinc-800 text-lg font-semibold ">
             {title}
           </h2>
