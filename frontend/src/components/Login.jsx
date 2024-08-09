@@ -31,7 +31,7 @@ const FormLogin = () => {
   }
   return (
     <div className="  flex flex-col w-fit  text-white justify-center items-center">
-      <h1 className="mt-4 font-semibold text-3xl">Login to Medishop.</h1>
+      <h1 className="mt-4 font-semibold text-3xl">Login to FoodTime.</h1>
       <div className="p-4 w-full items-center justify-center flex">
         <GoogleLogin
           theme="filled_blue"

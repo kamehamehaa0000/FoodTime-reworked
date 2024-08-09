@@ -57,7 +57,7 @@ const FormSignup = () => {
   return (
     <div className="flex flex-col text-white rounded-2xl justify-center items-center">
       <h1 className="font-semibold text-center mb-3 text-xl">
-        Create an Account on Medishop
+        Create an Account on FoodTime.
       </h1>
       <div className="text-base w-full text-white rounded-lg">
         <TextInput
