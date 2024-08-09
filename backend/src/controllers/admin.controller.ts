@@ -27,7 +27,7 @@ const loginAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const token = jwt.sign({ adminId: admin._id }, secret, { expiresIn: '4h' })
     res.cookie('adminToken', token, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
     })
     res
@@ -71,7 +71,7 @@ const userLogout = async (req: Request, res: Response) => {
     console.log('logout ran')
     res.cookie('adminToken', '', {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
     })
 

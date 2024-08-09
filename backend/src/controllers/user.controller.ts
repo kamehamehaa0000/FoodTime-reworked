@@ -112,6 +112,8 @@ const googleLogin = asyncHandler(async (req: Request, res: Response) => {
     })
     res.cookie('token', jwtToken, {
       httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     })
     const resUser = await User.findOne({ email }).select([
       '-password',
@@ -205,7 +207,7 @@ const userLogin = asyncHandler(async (req: Request, res: Response) => {
 
   res.cookie('token', token, {
     httpOnly: true,
-    secure: false,
+    secure: true,
     sameSite: 'none',
   })
 
@@ -226,6 +228,8 @@ const userLogout = asyncHandler(async (req: Request, res: Response) => {
     console.log('logout ran')
     res.cookie('token', '', {
       httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     })
 
     res
