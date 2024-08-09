@@ -37,6 +37,7 @@ const FormLogin = () => {
           theme="filled_blue"
           onSuccess={async (credentialResponse) => {
             const { credential } = credentialResponse
+            console.log(credential)
             try {
               const res = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/user/google`,
@@ -46,7 +47,7 @@ const FormLogin = () => {
                 }
               )
               navigate('/home')
-
+              console.log(res.data)
               setToken(res.data.data.token)
               console.log(token)
 

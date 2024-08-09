@@ -64,13 +64,13 @@ const generateUniqueUsername = async (displayName: string | undefined) => {
   if (!displayName) {
     displayName = 'newUser'
   }
-  const { nanoid } = await import('nanoid')
 
   displayName = displayName.split(' ')[0]
-  return `${displayName}-${nanoid(5)}`
+  return `${displayName}-${Math.random() * 1000}`
 }
 const googleLogin = asyncHandler(async (req: Request, res: Response) => {
   const { token } = req.body
+  console.log(token)
   try {
     const payload = await verifyGoogleToken(token)
     if (!payload) {
