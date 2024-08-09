@@ -10,13 +10,13 @@ import NotFound from './pages/404/NotFound'
 import Checkout from './pages/Checkout'
 import Success from './components/Success'
 import globalContext from './contexts/globalContext'
-import Dashboard from './pages/DashBoard'
+import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminNavbar from './components/AdminNavbar'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
+import axios from 'axios'
 const App = () => {
   const { token, adminToken } = useContext(globalContext)
   const [isAdminRoute, setIsAdminRoute] = useState('')
