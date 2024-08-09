@@ -47,7 +47,7 @@ const App = () => {
               />
               <Route exact path="/checkout" element={<Checkout />} />
               <Route exact path="/dashboard" element={<Dashboard />} />
-              <Route exact path="*" element={<NotFound />} />
+
               {adminToken ? (
                 <>
                   <Route exact path="/admin/*" element={<AdminDashboard />} />
@@ -68,11 +68,29 @@ const App = () => {
                   <Route exact path="/admin/signin" element={<AdminLogin />} />
                 </>
               )}
+              <Route exact path="*" element={<NotFound />} />
             </Routes>
           </>
         ) : (
           <Routes>
+            {adminToken ? (
+              <>
+                <Route exact path="/admin/*" element={<AdminDashboard />} />
+                <Route
+                  exact
+                  path="/admin/dashboard"
+                  element={<AdminDashboard />}
+                />
+              </>
+            ) : (
+              <>
+                <Route exact path="/admin/dashboard" element={<AdminLogin />} />
+                <Route exact path="/admin/*" element={<AdminLogin />} />
+                <Route exact path="/admin/signin" element={<AdminLogin />} />
+              </>
+            )}
             <Route exact path="*" element={<LoginPage />} />
+            <Route exact path="/admin" element={<AdminLogin />} />
             <Route exact path="/signup" element={<SignupPage />} />
             <Route exact path="/signin" element={<LoginPage />} />
           </Routes>

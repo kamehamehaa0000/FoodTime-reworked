@@ -25,7 +25,11 @@ const loginAdmin = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const token = jwt.sign({ adminId: admin._id }, secret, { expiresIn: '4h' })
-    res.cookie('adminToken', token, { httpOnly: true })
+    res.cookie('adminToken', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'none',
+    })
     res
       .status(200)
       .json(new ApiResponse(200, { admin, token }, 'Login successful'))
@@ -67,6 +71,8 @@ const userLogout = async (req: Request, res: Response) => {
     console.log('logout ran')
     res.cookie('adminToken', '', {
       httpOnly: true,
+      secure: false,
+      sameSite: 'none',
     })
 
     res
