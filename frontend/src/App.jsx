@@ -25,6 +25,17 @@ const App = () => {
     setIsAdminRoute(location.pathname.startsWith('/admin'))
   }, [location])
 
+  axios
+    .get('https://your-backend.onrender.com/set-cookie', {
+      withCredentials: true,
+    })
+    .then(() =>
+      axios.get('https://your-backend.onrender.com/read-cookie', {
+        withCredentials: true,
+      })
+    )
+    .then((response) => console.log(response.data))
+
   return (
     <GoogleOAuthProvider
       clientId={import.meta.env.VITE_REACT_APP_GOOGLE_API_TOKEN}

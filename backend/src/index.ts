@@ -21,6 +21,19 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('../public'))
 ConnectToDatabase()
 
+app.get('/set-cookie', (req, res) => {
+  res.cookie('testCookie', 'testValue', {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'none',
+  })
+  res.send('Cookie set')
+})
+
+app.get('/read-cookie', (req, res) => {
+  const cookie = req.cookies.testCookie
+  res.send(`Cookie value: ${cookie}`)
+})
 app.use('/api/v1/', mainRouter)
 
 app.listen(process.env.PORT, () => {
