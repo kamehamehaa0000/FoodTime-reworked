@@ -12,10 +12,6 @@ const ProductDetails = ({
   img = 'https://torange.biz/photofxnew/200/HD/dark-vivid-colors-cup-200471.jpg',
 }) => {
   const [isLightbox, setLightbox] = React.useState(false)
-  const handleAdd = () => {}
-  const handleMinus = () => {}
-  const handlePlus = () => {}
-
   function handleOverlayClick(event) {
     if (event.target === event.currentTarget) {
       setLightbox(!isLightbox)
@@ -35,7 +31,7 @@ const ProductDetails = ({
       (product?.data?.offerPercentage / 100) * product?.data?.price || '500'
 
   const quantity =
-    cart?.data?.items.filter((item) => {
+    cart?.data?.items?.filter((item) => {
       return item?.product?._id == product?.data?._id
     })[0]?.quantity || 0
 
@@ -44,7 +40,7 @@ const ProductDetails = ({
       <div className="flex items-center gap-16 px-36 py-20 max-lg:flex-col max-sm:py-0 max-sm:px-0 mb-10 overflow-hidden">
         <div className="grid grid-cols-1 w-1/2 max-lg:w-10/12 max-sm:h-3/4 max-sm:w-screen max-sm:mb-[-140px]">
           <img
-            src={product?.data?.imageUrl}
+            src={product?.data?.imageUrl || ''}
             className="rounded-lg w-10/12 max-sm:w-screen max-sm:h-3/4 max-sm:rounded-none"
             onClick={handleClick}
             alt=""
@@ -52,22 +48,24 @@ const ProductDetails = ({
         </div>
         <div className="w-1/2 max-lg:w-4/5">
           <h1 className="text-5xl mt-4 mb-8 max-sm:text-3xl">
-            {product?.data?.name}
+            {product?.data?.name || name}
           </h1>
           <div className="text-sm md:text-lg my-2">
-            <p className="">{product?.data?.description}</p>
+            <p className="">{product?.data?.description || 'description'}</p>
             <br />
           </div>
 
           <div className="flex flex-col items-start gap-4 mt-4 mb-5 max-sm:flex-row max-sm:justify-between max-sm:mb-7 max-sm:items-center">
             <div className="flex items-center gap-4">
-              <span className="font-bold text-4xl">Rs. {discountedPrice}</span>
+              <span className="font-bold text-4xl">
+                Rs. {discountedPrice || '898'}
+              </span>
               <span className="text-orange bg-orange-400 py-1 px-2 rounded-sm">
                 {product?.data?.offerPercentage} % off
               </span>
             </div>
             <p className="line-through font-bold">
-              Rs. {product?.data?.price}{' '}
+              Rs. {product?.data?.price || '2312'}{' '}
             </p>
           </div>
 
@@ -80,7 +78,7 @@ const ProductDetails = ({
                 width={18}
                 onClick={() => removeFromCart(product?.data?._id)}
               />
-              <div className="font-bold text-text-md">{quantity}</div>
+              <div className="font-bold text-text-md">{quantity || '1'}</div>
               <img
                 src="/images/icon-plus.svg"
                 alt=""
@@ -124,7 +122,7 @@ const ProductDetails = ({
             </svg>
             <img
               className="rounded-lg max-sm:mt-12 max-sm:h-2/3"
-              src={product?.data?.imageUrl}
+              src={product?.data?.imageUrl || ''}
               width={550}
             />
           </div>
