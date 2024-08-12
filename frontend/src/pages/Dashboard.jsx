@@ -110,6 +110,14 @@ const ShowOrders = () => {
             <h3 className="text-base font-semibold mb-4">
               Order ID: {order._id}
             </h3>
+            <h3 className="text-base font-semibold mb-4">
+              Phone No. : {order?.phoneNumber || ''}
+            </h3>
+            <h3 className="text-sm font-semibold mb-4">
+              Address:{' '}
+              {`${order?.address?.address}, ${order?.address?.city}, ${order?.address?.state}, ${order?.address?.pincode}` ||
+                ''}
+            </h3>
             <div className="mb-4 text-base">
               <h4 className="text-lg font-medium mb-2">Items:</h4>
               <div className="overflow-x-auto">
