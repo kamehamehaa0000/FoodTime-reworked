@@ -8,7 +8,7 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const [address, setAddress] = useState({
-    pinCode: '',
+    pincode: '',
     city: '',
     state: '',
     address: '',
@@ -186,8 +186,8 @@ const AddressForm = ({ address, setAddress, phoneNumber, setPhoneNumber }) => {
           id="pincode"
           required
           type="text"
-          name="pinCode"
-          value={address.pinCode}
+          name="pincode"
+          value={address.pincode}
           onChange={(e) => {
             setAddress((prev) => ({ ...prev, [e.target.name]: e.target.value }))
           }}
