@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from 'react-query'
-import TextInput from '../components/shared/TextInput'
 
 const Checkout = () => {
   const queryClient = useQueryClient()
@@ -14,12 +13,13 @@ const Checkout = () => {
     state: '',
     address: '',
   })
+  const [phoneNumber, setPhoneNumber] = useState('')
   const handleCreateOrder = async () => {
     setLoading(true)
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/order/create`,
-        { address },
+        { address, phoneNumber },
         { withCredentials: true }
       )
       if (data.data && data.data.razorpayOrderId) {
@@ -78,8 +78,6 @@ const Checkout = () => {
           withCredentials: true,
         }
       )
-
-      // Invalidate the cart query
       queryClient.invalidateQueries(['cart'])
       navigate('/success')
     } catch (error) {
@@ -90,7 +88,12 @@ const Checkout = () => {
   return (
     <div>
       <div>
-        <AddressForm address={address} setAddress={setAddress} />
+        <AddressForm
+          address={address}
+          setAddress={setAddress}
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
+        />
       </div>
       <button
         className="px-2 mt-2  py-2 text-sm font-semibold bg-green-500 rounded-lg text-white"
@@ -104,9 +107,26 @@ const Checkout = () => {
 }
 
 export default Checkout
-const AddressForm = ({ address, setAddress }) => {
+const AddressForm = ({ address, setAddress, phoneNumber, setPhoneNumber }) => {
   return (
     <div className="text-base w-full p-4 flex flex-col gap-2 max-w-lg bg-gray-100 rounded-xl">
+      <div>
+        <label className="font-semibold text-lg" htmlFor="PhoneNumber">
+          Phone Number{' '}
+        </label>
+        <input
+          id="PhoneNumber"
+          type="text"
+          name="PhoneNumber"
+          value={phoneNumber}
+          required
+          onChange={(e) => {
+            setPhoneNumber(e.target.value)
+          }}
+          placeholder="Enter your Phone Number"
+          className="px-2 w-full py-1 rounded-md bg-zinc-800 text-gray-200"
+        />
+      </div>
       <div>
         <label className="font-semibold text-lg" htmlFor="address">
           Delivery Address{' '}
