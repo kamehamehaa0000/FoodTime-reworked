@@ -9,10 +9,13 @@ const app = express()
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN.split(' ') || 'http://localhost:5173', // Ensure this matches your frontend origin
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(' ')
+      : 'http://localhost:5173', 
     credentials: true,
   })
-)
+);
+
 
 app.use(cookieParser())
 app.use(express.json())
