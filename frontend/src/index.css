@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('../src/assets/font/Gilroy.eot') format('woff'),
+    url('../src/assets/font/Gilroy.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Gilroy', sans-serif;
+}
